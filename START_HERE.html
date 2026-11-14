@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rhino Turret Compass — Start here</title>
+<style>body{max-width:980px;margin:3rem auto;padding:0 1.4rem;font:17px/1.6 system-ui,sans-serif;color:#22303b}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf2f5;padding:1rem}img{max-width:100%;height:auto}h1{line-height:1.2}a{color:#165d87}aside{border-left:4px solid #c28a31;background:#fff7e8;padding:1rem}li{margin:.6rem 0}code{font-size:.95em}</style></head>
+<body><h1>Rhino Turret Compass v0.2.2-beta.1</h1>
+<p>Experimental Windows x86-64 / Python 3.12 companion for measuring the Rhino turret HUD's field-of-view cone.</p>
+<aside><strong>Community beta.</strong> Synthetic image tests are not a measurement of actual game-bearing accuracy. A single Windows user reports successful live use; other machines and accuracy distributions remain unverified.</aside>
+<h2>Install and check</h2>
+<ol><li>Extract the full ZIP to a short new folder (e.g., <code>%USERPROFILE%\RTC</code>); the installer rejects deeply nested installation paths before downloading. Open the folder containing <code>Setup_Beta.cmd</code>.</li>
+<li>Install Python 3.12 x86-64 from python.org. Check <code>py -3.12 --version</code> in a normal terminal.</li>
+<li>Run <strong>Setup_Beta.cmd</strong>. It creates this folder's own environment and downloads hash-checked packages. Keep antivirus and checksum checks enabled.</li>
+<li>Run <strong>Verify_Package.cmd</strong>, <strong>Run_Tests.cmd</strong>, then <strong>Run_UI_Check.cmd</strong>. Resolve failures before proceeding.</li>
+<li>Run <strong>Run_Beta.cmd</strong>. Keep the console visible for errors.</li></ol>
+<p><a href="README.md">Full instructions</a> &bull; <a href="COMMUNITY_BETA.md">Community beta quickstart and testing notes</a></p>
+<h2>Start with the supplied image</h2>
+<p>Choose <strong>Open supplied sample</strong>. Inspect the fixed ring center, two cone boundaries and green bisector. The sample's image angle is about 298 degrees, not a known compass bearing.</p>
+<img src="DETECTION_PREVIEW_v0.2.png" alt="Original HUD crop, classified pixels and ring-derived cone bisector">
+<h2>First live calibration</h2>
+<ol><li>Park the Rhino on approximately level ground. Stop and note its chassis heading. Use Borderless display mode for the first test.</li>
+<li>Choose the monitor and <strong>Choose LIVE region</strong>. Select only the full rightmost circular indicator, with a small margin. Keep the tool's windows away from that crop.</li>
+<li>Inspect the fit, then choose <strong>Lock ring — center is correct</strong>. Reselect rather than accepting a visibly wrong center.</li>
+<li>Enter the chassis heading. Aim the turret along the nose and set <strong>FORWARD</strong>. Turn the turret about 90 degrees right and perform the <strong>RIGHT</strong> check.</li>
+<li>Confirm the stationary/level/aligned conditions. Return forward and perform a slow full-circle sweep. The pivot should remain fixed and the line should bisect the cone.</li>
+<li>Center a target marker. Use <strong>Freeze &amp; COPY bearing now</strong> or the optional Ctrl+Alt+B hotkey. A failed copy leaves the clipboard unchanged; do not reuse an old number.</li></ol>
+<p><strong>After chassis movement:</strong> invalidate the anchor and repeat calibration. A screen-only estimate cannot establish that the vehicle stayed motionless.</p>
+<h2>Diagnostics and development</h2>
+<p><strong>Save diagnostic snapshot…</strong> explicitly saves a raw crop, preview and JSON under a new filename. Review the crop and local paths before sharing. Keep captures outside the source folder.</p>
+<p>Use a copy of <a href="FIRST_TEST_RECORD.csv">the first-test record</a> for observations. See <a href="CONTRIBUTING.md">contribution guidance</a>, <a href="NOTICE.md">attribution</a>, and <a href="LICENSE">the software license</a>.</p>
+<p>The application processes the selected HUD pixels locally. Setup is the internet-using step. Compass output remains a standalone estimate.</p>
+</body></html>

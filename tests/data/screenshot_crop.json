@@ -1,0 +1,13 @@
+{
+  "parent": "SAMPLE_RHINO_SYSTEMS_CROP.jpeg",
+  "parent_sha256": "3e7291a36819e4faa516f91220014afcfd3b6475e75d3313468acda83d1a9744",
+  "crop_xyxy": [
+    290,
+    67,
+    400,
+    176
+  ],
+  "width": 110,
+  "height": 109,
+  "format": "RGB888 row-major; regression crop from the bundled HUD sample"
+}
