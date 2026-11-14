@@ -1,0 +1,32 @@
+name: Initial source import
+'on':
+  push:
+    branches: [maintenance/source-import]
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: windows-2022
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Install hash-pinned image decoder
+        run: |
+          python -m pip --isolated install --index-url https://pypi.org/simple --require-hashes --only-binary=:all: --disable-pip-version-check --no-input --no-cache-dir -r transfer/requirements.txt
+      - name: Verify snapshot and create new source branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -B transfer/import_source.py
