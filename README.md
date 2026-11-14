@@ -6,7 +6,18 @@ A floating compass for the **Rhino SRV turret in Elite Dangerous**. Point the tu
 
 The application reads the cyan field-of-view cone in the circular turret HUD. The orange ring defines a fixed pivot; the two cone boundaries define the viewing direction. A manually entered chassis heading and a short forward/right calibration turn that direction into an estimated world bearing.
 
-![Original HUD, detected sector, and fixed-pivot heading line](DETECTION_PREVIEW_v0.2.png)
+## How the turret HUD is read
+
+**Where to look:** The compass reads the cyan direction cone inside the **rightmost circular Rhino indicator**. This wider screenshot shows where that indicator sits in the vehicle's systems panel. In live capture, select **only the circular indicator**, not the surrounding SYS/ENG/WEP gauges.
+
+![Cropped in-game Rhino systems panel with the cyan turret cone in the rightmost circular indicator](SAMPLE_RHINO_SYSTEMS_CROP.jpeg)
+
+**What the detector measures:** Left — the original indicator crop. Middle — detected cone pixels highlighted in magenta. Right — the fixed ring pivot and the calculated viewing-direction bisector in green. The displayed **297.97° is an image-relative angle**, not a calibrated game bearing or a claim of in-game accuracy.
+
+![Three-panel detector demonstration: original Rhino turret indicator, detected cyan cone pixels, and fixed-pivot green bisector](DETECTION_PREVIEW_v0.2.png)
+
+The resulting compass bearing also requires the stationary chassis heading and a forward/right reference calibration, described below. These examples are static HUD samples, not screenshots of the floating readout.
+
 
 ## Download
 
