@@ -13,9 +13,9 @@ import urllib.parse
 import urllib.request
 
 REPO = 'erichards2222-maker/Rhino-turret-compass-v2'
-TAG = 'v0.2.2-beta.1'
+TAG = 'v0.2.2-beta.2'
 API = 'https://api.github.com/repos/' + REPO
-FILES = ('Rhino_Turret_Compass_v0.2.2-beta.1_Beta_SOURCE.zip', 'CHECKSUMS.sha256',
+FILES = ('Rhino_Turret_Compass_v0.2.2-beta.2_Beta_SOURCE.zip', 'CHECKSUMS.sha256',
          'RELEASE_NOTES.md', 'SOURCE_PROVENANCE.json')
 
 

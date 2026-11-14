@@ -1,4 +1,4 @@
-"""RHINO Turret Compass v0.2.2-beta.1: a local HUD-image bearing estimator.
+"""RHINO Turret Compass v0.2.2-beta.2: a local HUD-image bearing estimator.
 
 Inputs are a user-selected screen rectangle or an image, plus manual calibration.
 Outputs are a floating readout, an explicit clipboard copy, and optional diagnostics.
@@ -232,7 +232,7 @@ class GameFocus:
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('RHINO Turret Compass v0.2.2-beta.1 — experimental, screen-only')
+        self.setWindowTitle('RHINO Turret Compass v0.2.2-beta.2 — experimental, screen-only')
         self.session=Session();self.source_type=None;self.live_screen=None
         self.crop_logical=None;self.screen_signature=None;self.demo_crop=None
         self.last_frame=None;self.last_array=None;self.last_detection=None;self.candidate_ring=None

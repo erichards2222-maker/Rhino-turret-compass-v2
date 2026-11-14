@@ -1,6 +1,6 @@
 # Community beta quickstart
 
-**Rhino Turret Compass v0.2.2-beta.1 — Windows x64 / Python 3.12**
+**Rhino Turret Compass v0.2.2-beta.2 — Windows x64 / Python 3.12**
 
 Use the Rhino SRV turret as a convenient bearing indicator for landmarks, surface contacts, or survey notes. The floating compass estimates direction from the circular HUD graphic while the chassis remains parked.
 
@@ -28,4 +28,4 @@ A bearing can be used with any application or calculator that explicitly accepts
 
 Report reproducible problems through Issues with version, display setup and steps. Save only reviewed indicator crops when diagnostics are needed. See README.md for full instructions and limitations.
 
-MIT-licensed source is included. Retain the required license notice when reusing code. Credit to CMDR Rhino / Rhino Turret Compass is appreciated for code or concept reuse, without adding restrictions to the MIT license.
+MIT-licensed source is included. Retain the required license notice when reusing code. Credit to CMDR Dunn Actual / Rhino Turret Compass is appreciated for code or concept reuse, without adding restrictions to the MIT license.

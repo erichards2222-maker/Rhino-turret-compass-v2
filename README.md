@@ -1,6 +1,6 @@
 # Rhino Turret Compass
 
-**v0.2.2-beta.1 · Experimental community beta · Windows x64 · Python 3.12**
+**v0.2.2-beta.2 · Experimental community beta · Windows x64 · Python 3.12**
 
 A floating compass for the **Rhino SRV turret in Elite Dangerous**. Point the turret toward a landmark, surface contact, or resource deposit and read an estimated compass bearing without rotating the entire vehicle.
 
@@ -92,6 +92,6 @@ Generated results and local environments belong outside tracked source. After in
 
 ## License and credit
 
-Code and documentation are **MIT-licensed**; see [LICENSE](LICENSE). You may use, adapt and incorporate them while retaining the required copyright/license notice. A visible acknowledgement of **CMDR Rhino / Rhino Turret Compass** is appreciated when the code or concept is useful; this is a courtesy request, not an extra license condition.
+Code and documentation are **MIT-licensed**; see [LICENSE](LICENSE). You may use, adapt and incorporate them while retaining the required copyright/license notice. A visible acknowledgement of **CMDR Dunn Actual / Rhino Turret Compass** is appreciated when the code or concept is useful; this is a courtesy request, not an extra license condition.
 
 Thanks to **Armchair** for the surveying discussion that inspired the tool. It is a standalone companion for general use. Game artwork and dependency notices are in [NOTICE.md](NOTICE.md).
