@@ -1,0 +1,100 @@
+name: Publish community beta
+'on':
+  push:
+    branches: [publish/v0.2.2-beta.1]
+permissions:
+  contents: read
+concurrency:
+  group: publish-v0.2.2-beta.1
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.repository == 'erichards2222-maker/Rhino-turret-compass-v2'
+    runs-on: windows-2022
+    timeout-minutes: 25
+    outputs:
+      commit: ${{ steps.pin.outputs.commit }}
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      QT_QPA_PLATFORM: offscreen
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out publication request
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Pin selected main commit and verify source tree
+        id: pin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $main = gh api repos/${{ github.repository }}/git/ref/heads/main --jq .object.sha
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot read main' }
+          git fetch origin main --depth=1
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot fetch main' }
+          $localTree = git rev-parse 'HEAD^{tree}'
+          $mainTree = git rev-parse "$main`^{tree}"
+          if ($localTree -ne $mainTree) { throw 'Publication tree differs from main' }
+          git checkout --detach $main
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot check out selected commit' }
+          "commit=$main" >> $env:GITHUB_OUTPUT
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Install and verify
+        run: |
+          python -B tools/verify_package.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip --isolated install --index-url https://pypi.org/simple --require-hashes --only-binary=:all: --disable-pip-version-check --no-input --no-cache-dir -r requirements.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -B environment_check.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -B -m unittest discover -s tests -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -B tools/gui_smoke.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          foreach ($suite in @('clean','degraded','adversarial','apex')) {
+            python -B tools/run_matrix.py $suite --output test-output
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - name: Build distribution
+        run: python -B tools/build_release.py "${{ runner.temp }}/release-assets"
+      - name: Retest the distribution archive
+        env:
+          COMPASS_COMMIT: ${{ steps.pin.outputs.commit }}
+        run: python -B tools/verify_roundtrip.py "${{ runner.temp }}/release-assets/Rhino_Turret_Compass_v0.2.2-beta.1_Beta_SOURCE.zip" --output test-output
+      - name: Save release assets
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: publication-assets
+          path: ${{ runner.temp }}/release-assets/*
+          if-no-files-found: error
+          retention-days: 14
+  publish:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Check out tested release code
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ needs.prepare.outputs.commit }}
+          persist-credentials: false
+      - name: Download tested assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --name publication-assets --dir "$RUNNER_TEMP/release-assets"
+      - name: Publish exact prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_ASSETS: ${{ runner.temp }}/release-assets
+          RELEASE_COMMIT: ${{ needs.prepare.outputs.commit }}
+        run: python3 -B tools/publish_beta.py

@@ -1,0 +1,17 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.test-output/
+test-output/
+diagnostics/
+*.raw.png
+*.preview.png
+*.diagnostic.json
+.env
+.env.*
+*.log
+*.zip
+.DS_Store
+Thumbs.db

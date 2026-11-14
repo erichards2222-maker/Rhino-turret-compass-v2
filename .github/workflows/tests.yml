@@ -1,0 +1,76 @@
+name: Compass tests
+'on':
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: compass-tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  windows:
+    name: Windows Python 3.12
+    runs-on: windows-2022
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - name: Check out the exact proposed commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Verify source inventory
+        run: python -B tools/verify_package.py
+      - name: Install pinned target dependencies
+        run: |
+          python -m pip --isolated install --index-url https://pypi.org/simple --require-hashes --only-binary=:all: --disable-pip-version-check --no-input --no-cache-dir -r requirements.txt
+      - name: Check declared environment
+        run: python -B environment_check.py
+      - name: Run unit tests
+        run: python -B -m unittest discover -s tests -v
+      - name: Exercise Qt interface using the static sample
+        run: python -B tools/gui_smoke.py
+      - name: Clean rotation suite
+        run: python -B tools/run_matrix.py clean --output test-output
+      - name: Degraded image suite
+        run: python -B tools/run_matrix.py degraded --output test-output
+      - name: Invalid image suite
+        run: python -B tools/run_matrix.py adversarial --output test-output
+      - name: Apex-fit caution and displaced-origin suite
+        run: python -B tools/run_matrix.py apex --output test-output
+      - name: Recheck source integrity
+        run: python -B tools/verify_package.py
+      - name: Build source snapshot
+        run: python -B tools/source_snapshot.py "${{ runner.temp }}/compass-source.zip"
+      - name: Retest fresh source archive and record exact commit
+        env:
+          COMPASS_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python -B tools/verify_roundtrip.py "${{ runner.temp }}/compass-source.zip" --output test-output
+      - name: Preserve test results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: test-results-${{ github.event.pull_request.head.sha || github.sha }}
+          path: test-output/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Preserve exact source snapshot
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: source-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/compass-source.zip
+          if-no-files-found: error
+          retention-days: 14
