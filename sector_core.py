@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 import math
 import numpy as np
 
-VERSION = '0.2.2-beta.1'
+VERSION = '0.2.2-beta.2'
 
 
 def normalize(degrees: float) -> float:

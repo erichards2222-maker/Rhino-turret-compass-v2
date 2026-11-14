@@ -3,7 +3,7 @@ setlocal
 cd /d "%~dp0"
 if errorlevel 1 goto failed
 set "PYTHONDONTWRITEBYTECODE=1"
-echo RHINO Turret Compass v0.2.2-beta.1 - project-local beta environment
+echo RHINO Turret Compass v0.2.2-beta.2 - project-local beta environment
 echo Run as an ordinary user in a fresh extracted project folder.
 py -3.12 -c "import sys,struct,platform;sys.exit(0 if sys.version_info[:2]==(3,12) and struct.calcsize('P')==8 and platform.machine().lower() in ('amd64','x86_64') else 1)" >nul 2>nul
 if errorlevel 1 goto python_missing

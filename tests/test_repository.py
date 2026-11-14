@@ -45,6 +45,12 @@ class RepositoryTests(unittest.TestCase):
         d = json.loads((ROOT/'tests/data/screenshot_crop.json').read_text())
         self.assertEqual(hashlib.sha256((ROOT/d['parent']).read_bytes()).hexdigest(), d['parent_sha256'])
         self.assertEqual((ROOT/'tests/data/screenshot_crop.rgb').stat().st_size, 110*109*3)
+    def test_correct_commander_attribution(self):
+        for name in ('README.md', 'NOTICE.md', 'RELEASE_NOTES.md', 'COMMUNITY_BETA.md'):
+            text = (ROOT/name).read_text(encoding='utf-8')
+            self.assertIn('CMDR Dunn Actual', text, name)
+            self.assertNotIn('CMDR ' + 'Rhino', text, name)
+
     def test_license_and_notices_present(self):
         self.assertTrue((ROOT/'LICENSE').read_text().startswith('MIT License'))
         self.assertIn('Frontier', (ROOT/'NOTICE.md').read_text())

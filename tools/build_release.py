@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.2.2-beta.1'
+VERSION = '0.2.2-beta.2'
 REPOSITORY = 'erichards2222-maker/Rhino-turret-compass-v2'
 
 

@@ -1,11 +1,11 @@
 name: Publish community beta
 'on':
   push:
-    branches: [publish/v0.2.2-beta.1]
+    branches: [publish/v0.2.2-beta.2]
 permissions:
   contents: read
 concurrency:
-  group: publish-v0.2.2-beta.1
+  group: publish-v0.2.2-beta.2
   cancel-in-progress: false
 jobs:
   prepare:
@@ -67,7 +67,7 @@ jobs:
       - name: Retest the distribution archive
         env:
           COMPASS_COMMIT: ${{ steps.pin.outputs.commit }}
-        run: python -B tools/verify_roundtrip.py "${{ runner.temp }}/release-assets/Rhino_Turret_Compass_v0.2.2-beta.1_Beta_SOURCE.zip" --output test-output
+        run: python -B tools/verify_roundtrip.py "${{ runner.temp }}/release-assets/Rhino_Turret_Compass_v0.2.2-beta.2_Beta_SOURCE.zip" --output test-output
       - name: Save release assets
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2-beta.2 - commander attribution correction
+
+- Correct the public credit to CMDR Dunn Actual across documentation and release notes.
+- Update release/version labels and keep the prior beta immutable.
+- Bearing estimation, calibration, dependencies, and installation behavior unchanged.
+
 ## 0.2.2-beta.1 — first public community beta
 
 - General-purpose turret-bearing instructions, quickstart, attribution and release packaging.
